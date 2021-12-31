@@ -11,6 +11,9 @@ import danogl.util.Vector2;
 import pepse.world.Sky;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
+import pepse.world.daynight.SunHalo;
+
+import java.awt.*;
 
 public class PepseGameManager extends GameManager {
     private GameObject sun;
@@ -50,5 +53,6 @@ public class PepseGameManager extends GameManager {
         Sky.create(gameObjects(), windowController.getWindowDimensions(), Layer.BACKGROUND);
         Night.create(gameObjects(), windowController.getWindowDimensions(), 10f, Layer.FOREGROUND);
         sun = Sun.create(windowController.getWindowDimensions(), 20, gameObjects(), Layer.BACKGROUND+1);
+        SunHalo.create(gameObjects(), sun, new Color(255, 255, 0, 20), Layer.BACKGROUND+10);
     }
 }
