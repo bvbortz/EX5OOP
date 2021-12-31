@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class Night {
     private static final Color NIGHT_COLOR = Color.BLACK;
-    private static final float MIDNIGHT_OPACITY = 0.5f;
+    private static final Float MIDNIGHT_OPACITY = 0.5f;
 
     public static GameObject create(
             GameObjectCollection gameObjects,
@@ -24,7 +24,7 @@ public class Night {
         night.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         gameObjects.addGameObject(night, layer);
         night.setTag("night");
-        new Transition<Float>(
+        Transition<Float> nightTransition = new Transition<>(
                 night, //the game object being changed
                 night.renderer()::setOpaqueness,  //the method to call
                 0f,    //initial transition value
