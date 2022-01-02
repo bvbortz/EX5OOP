@@ -9,6 +9,7 @@ import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import danogl.util.Vector2;
 import pepse.world.Sky;
+import pepse.world.Terrain;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
@@ -54,5 +55,8 @@ public class PepseGameManager extends GameManager {
         Night.create(gameObjects(), windowController.getWindowDimensions(), 10f, Layer.FOREGROUND);
         sun = Sun.create(windowController.getWindowDimensions(), 20, gameObjects(), Layer.BACKGROUND+1);
         SunHalo.create(gameObjects(), sun, new Color(255, 255, 0, 20), Layer.BACKGROUND+10);
+        Terrain terrain = new Terrain(gameObjects(), Layer.STATIC_OBJECTS,
+                windowController.getWindowDimensions(), 78);
+        terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
     }
 }
