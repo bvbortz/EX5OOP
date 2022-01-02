@@ -14,7 +14,6 @@ public class Terrain {
     private static final int TERRAIN_DEPTH = 20;
 
     private final NoiseGenerator noiseGenerator;
-    private final double noiseAtX0;
     private float groundHeightAtX0;
     private GameObjectCollection gameObjects;
     private int groundLayer;
@@ -22,22 +21,23 @@ public class Terrain {
     public Terrain(GameObjectCollection gameObjects, int groundLayer, Vector2 windowDimensions, int seed) {
         this.gameObjects = gameObjects;
         this.groundLayer = groundLayer;
-        this.groundHeightAtX0 = windowDimensions.y() * (2f / 3);
+        this.groundHeightAtX0 = windowDimensions.y() * (3f / 4);
         this.noiseGenerator = new NoiseGenerator(seed, (int)groundHeightAtX0);
-        this.noiseAtX0 = noiseGenerator.noise(0);
 
     }
 
     public float groundHeightAt(float x) {
+        // multiply to make more noticeable
         return (float) (groundHeightAtX0 + (5 * Block.SIZE * noiseGenerator.noise(x)));
     }
 
     public void createInRange(int minX, int maxX) {
-        int x = minX;
-        while (x <= maxX){
-            float y = (float) (Math.floor(groundHeightAt(x) / Block.SIZE) * Block.SIZE);
+        // so whole game can know where columns start and end
+        minX = Block.round(minX);
+        maxX = Block.round(maxX);
+        for (int x = minX; x <= maxX; x+= Block.SIZE) {  // creates each column of ground
+            float y = Block.round(groundHeightAt(x));
             createColumn(x, y);
-            x += Block.SIZE;
         }
     }
 
@@ -54,9 +54,6 @@ public class Terrain {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
 }
 
 

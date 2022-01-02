@@ -8,11 +8,13 @@ import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import danogl.util.Vector2;
+import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
+import pepse.world.trees.Tree;
 
 import java.awt.*;
 
@@ -58,5 +60,7 @@ public class PepseGameManager extends GameManager {
         Terrain terrain = new Terrain(gameObjects(), Layer.STATIC_OBJECTS,
                 windowController.getWindowDimensions(), 78);
         terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
+        Tree tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
+        tree.createInRange(0, (int)windowController.getWindowDimensions().x());
     }
 }

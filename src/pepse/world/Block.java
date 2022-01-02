@@ -13,4 +13,8 @@ public class Block extends GameObject {
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
     }
+
+    public static int round(float coordinate){
+        return (int)(coordinate/SIZE) * SIZE;
+    }
 }
