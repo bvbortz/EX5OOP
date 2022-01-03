@@ -59,7 +59,7 @@ public class PepseGameManager extends GameManager {
         sun = Sun.create(windowController.getWindowDimensions(), 20, gameObjects(), Layer.BACKGROUND+1);
         SunHalo.create(gameObjects(), sun, new Color(255, 255, 0, 20), Layer.BACKGROUND+10);
         Terrain terrain = new Terrain(gameObjects(), Layer.STATIC_OBJECTS,
-                windowController.getWindowDimensions(), 78);
+                windowController.getWindowDimensions(), 60);
         terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
         Tree tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
         tree.createInRange(0, (int)windowController.getWindowDimensions().x());

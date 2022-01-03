@@ -44,7 +44,7 @@ public class Tree {
      * @param treeBlocks how many blocks high the tree is
      */
     public void createTree(int x, int treeBlocks) {
-        float groundHeight = groundHeightFunc.apply(x);
+        float groundHeight = Block.round(groundHeightFunc.apply(x));
         for (int i = 0; i < treeBlocks; i++) {  // builds tree
             Block trunk = new Block(new Vector2(x,
                     Block.round(groundHeight - (treeBlocks * Block.SIZE) +
