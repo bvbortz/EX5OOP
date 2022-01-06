@@ -3,6 +3,7 @@ package pepse.world.trees;
 import danogl.collisions.GameObjectCollection;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
+import pepse.util.ColorSupplier;
 import pepse.world.Block;
 
 import java.awt.*;
@@ -48,7 +49,8 @@ public class Tree {
         for (int i = 0; i < treeBlocks; i++) {  // builds tree
             Block trunk = new Block(new Vector2(x,
                     Block.round(groundHeight - (treeBlocks * Block.SIZE) +
-                            (i * Block.SIZE))), new RectangleRenderable(TREE_COLOR));
+                            (i * Block.SIZE))),
+                    new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR)));
             gameObjects.addGameObject(trunk, treeLayer);
         }
         int leafYStart =   // leaves start from 2 blocks on top of trunk

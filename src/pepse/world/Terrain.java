@@ -49,7 +49,8 @@ public class Terrain {
     private void createColumn(int x, float y) {
         for (int i = 0; i < TERRAIN_DEPTH; i++) {
             Block groundBlock = new Block(new Vector2(x, y + (i * Block.SIZE)),
-                    new RectangleRenderable(BASE_GROUND_COLOR));
+                    new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
+            groundBlock.setTag("groundBlock");
             gameObjects.addGameObject(groundBlock, groundLayer);
         }
     }

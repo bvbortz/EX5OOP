@@ -52,7 +52,7 @@ public class PepseGameManager extends GameManager {
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-        //windowController.setTargetFramerate(95);
+        windowController.setTargetFramerate(95);
         System.out.printf("screen: x-%f, y-%f", windowController.getWindowDimensions().x(), windowController.getWindowDimensions().y());
         Sky.create(gameObjects(), windowController.getWindowDimensions(), Layer.BACKGROUND);
         Night.create(gameObjects(), windowController.getWindowDimensions(), 10f, Layer.FOREGROUND);
@@ -63,5 +63,6 @@ public class PepseGameManager extends GameManager {
         terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
         Tree tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
         tree.createInRange(0, (int)windowController.getWindowDimensions().x());
+        gameObjects().layers().shouldLayersCollide(Layer.STATIC_OBJECTS, Layer.DEFAULT, true);
     }
 }
