@@ -8,6 +8,7 @@ import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import danogl.util.Vector2;
+import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
@@ -63,6 +64,9 @@ public class PepseGameManager extends GameManager {
         terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
         Tree tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
         tree.createInRange(0, (int)windowController.getWindowDimensions().x());
+        Avatar avatar = Avatar.create(gameObjects(), Layer.DEFAULT,
+                new Vector2(300, 100), inputListener, imageReader);
         gameObjects().layers().shouldLayersCollide(Layer.STATIC_OBJECTS , Layer.DEFAULT, true);
+
     }
 }
