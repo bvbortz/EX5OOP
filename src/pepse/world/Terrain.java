@@ -15,7 +15,7 @@ public class Terrain {
 
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int TERRAIN_DEPTH = 20;
-    private HashMap<Integer, ArrayList<Block>> map;
+    private HashMap<Integer, HashMap<Block, Integer>> mapXtoBlocksToLayer = new HashMap<>();
     private final NoiseGenerator noiseGenerator;
     private float groundHeightAtX0;
     private GameObjectCollection gameObjects;
@@ -38,6 +38,13 @@ public class Terrain {
         // so whole game can know where columns start and end
         minX = Block.round(minX);
         maxX = Block.round(maxX);
+        for(var elems : mapXtoBlocksToLayer.entrySet()){
+            if(elems.getKey() < minX || elems.getKey() > maxX){
+                for(var elems2 : elems.getValue().entrySet()){
+                    gameObjects.removeGameObject(elems2.getKey(), elems2.getValue());
+                }
+            }
+        }
         for (int x = minX; x <= maxX; x+= Block.SIZE) {  // creates each column of ground
             float y = Block.round(groundHeightAt(x));
             createColumn(x, y);
@@ -50,17 +57,22 @@ public class Terrain {
      * @param y y coordinate
      */
     private void createColumn(int x, float y) {
+        HashMap<Block, Integer> blockToLayer = new HashMap<>();
         for (int i = 0; i < TERRAIN_DEPTH; i++) {
             Block groundBlock = new Block(new Vector2(x, y + (i * Block.SIZE)),
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
-            if(i <= 1){
+            blockToLayer.put(groundBlock, groundLayer);
+            if(i <= 2){
                 groundBlock.setTag("groundBlock");
+                gameObjects.addGameObject(groundBlock, groundLayer);
             }
             else{
                 groundBlock.setTag("groundBlockLow");
+                gameObjects.addGameObject(groundBlock, groundLayer);
             }
-            gameObjects.addGameObject(groundBlock, groundLayer);
+
         }
+        mapXtoBlocksToLayer.put(x, blockToLayer);
     }
 
 }
