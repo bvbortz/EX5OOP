@@ -63,6 +63,6 @@ public class PepseGameManager extends GameManager {
         terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
         Tree tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
         tree.createInRange(0, (int)windowController.getWindowDimensions().x());
-        gameObjects().layers().shouldLayersCollide(Layer.STATIC_OBJECTS, Layer.DEFAULT, true);
+        gameObjects().layers().shouldLayersCollide(Layer.STATIC_OBJECTS , Layer.DEFAULT, true);
     }
 }

@@ -27,7 +27,7 @@ public class Leaf extends Block {
         // transitions leaf angles
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeAngle);
-        // transitions leaf size
+        // tansitions leaf size
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeDimensions);
         // drops leaves
@@ -67,10 +67,9 @@ public class Leaf extends Block {
                 1, // transition fully over a day
                 Transition.TransitionType.TRANSITION_BACK_AND_FORTH,
                 null); // nothing further to execute upon reaching final value
-        //this.renderer().fadeOut(10);
         renderer().fadeOut(10, this::returnLeaf);
-        //new ScheduledTask(this, rand.nextFloat(10) + 10, false, this::returnLeaf);
     }
+
 
     private void returnLeaf(){
         setTopLeftCorner(this.topLeftCorner);

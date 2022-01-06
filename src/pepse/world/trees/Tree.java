@@ -51,6 +51,7 @@ public class Tree {
                     Block.round(groundHeight - (treeBlocks * Block.SIZE) +
                             (i * Block.SIZE))),
                     new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR)));
+            trunk.setTag("trunkBlock");
             gameObjects.addGameObject(trunk, treeLayer);
         }
         int leafYStart =   // leaves start from 2 blocks on top of trunk
@@ -60,6 +61,7 @@ public class Tree {
             for (int k = 0; k < 5; k++) {
                 Leaf leaf = new Leaf(new Vector2(leafXStart + (k * (Block.SIZE + LEAF_GAP)),
                         leafYStart + (j * (Block.SIZE + LEAF_GAP))));
+                leaf.setTag("leafBlock");
                 gameObjects.addGameObject(leaf);
             }
         }
