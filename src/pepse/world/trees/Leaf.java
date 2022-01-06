@@ -2,6 +2,8 @@ package pepse.world.trees;
 
 import danogl.GameObject;
 import danogl.collisions.Collision;
+import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.components.ScheduledTask;
 import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
@@ -20,9 +22,11 @@ public class Leaf extends Block {
     private Transition<Float> horizontalTransition;
     private Transition<Float> angleTransition;
     private Transition<Vector2> dimensionsTransition;
+    private GameObjectCollection gameObjects;
 
-    public Leaf(Vector2 topLeftCorner) {
+    public Leaf(Vector2 topLeftCorner, GameObjectCollection gameObjects) {
         super(topLeftCorner, new RectangleRenderable(LEAF_COLOR));
+        this.gameObjects = gameObjects;
         physics().setMass(1);
         this.topLeftCorner = topLeftCorner;
         this.rand = new Random();
@@ -33,7 +37,7 @@ public class Leaf extends Block {
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeDimensions);
         // drops leaves
-        new ScheduledTask(this, rand.nextFloat(100) + 20, false, this::dropLeaf);
+        new ScheduledTask(this, rand.nextFloat(100) , false, this::dropLeaf);
     }
 
     /**
@@ -59,6 +63,8 @@ public class Leaf extends Block {
      * makes leaf fall and fade out
      */
     private void dropLeaf(){
+        gameObjects.removeGameObject(this, Layer.STATIC_OBJECTS);
+        gameObjects.addGameObject(this, Layer.DEFAULT);
         transform().setVelocityY(100);
         this.horizontalTransition = new Transition<>(
                 this, // the game object being changed
@@ -74,15 +80,19 @@ public class Leaf extends Block {
 
 
     private void returnLeaf(){
-        setTopLeftCorner(this.topLeftCorner);
+
+        stopLeafMovement();
         renderer().setOpaqueness(1);
+        setTopLeftCorner(this.topLeftCorner);
+        gameObjects.removeGameObject(this, Layer.DEFAULT);
+        gameObjects.addGameObject(this, Layer.STATIC_OBJECTS);
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeAngle);
         // tansitions leaf size
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeDimensions);
         // drops leaves
-        new ScheduledTask(this, rand.nextFloat(100) + 20, false, this::dropLeaf);
+        new ScheduledTask(this, rand.nextFloat(100) , false, this::dropLeaf);
 
     }
 
@@ -97,9 +107,29 @@ public class Leaf extends Block {
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
+        stopLeafMovement();
+    }
+
+    private void stopLeafMovement() {
         this.setVelocity(Vector2.ZERO);
-        removeComponent(horizontalTransition);
-        removeComponent(dimensionsTransition);
-        removeComponent(angleTransition);
+        if(horizontalTransition != null){
+            removeComponent(horizontalTransition);
+            horizontalTransition = null;
+        }
+        if(dimensionsTransition != null){
+            removeComponent(dimensionsTransition);
+            dimensionsTransition = null;
+        }
+        if(angleTransition != null){
+            removeComponent(angleTransition);
+            angleTransition = null;
+        }
+    }
+
+    @Override
+    public void onCollisionExit(GameObject other) {
+        super.onCollisionExit(other);
+        transform().setVelocityY(50);
+
     }
 }

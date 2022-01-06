@@ -60,7 +60,7 @@ public class Tree {
         for (int j = 0; j < 4; j++) {  // adds leaves
             for (int k = 0; k < 5; k++) {
                 Leaf leaf = new Leaf(new Vector2(leafXStart + (k * (Block.SIZE + LEAF_GAP)),
-                        leafYStart + (j * (Block.SIZE + LEAF_GAP))));
+                        leafYStart + (j * (Block.SIZE + LEAF_GAP))), gameObjects);
                 leaf.setTag("leafBlock");
                 gameObjects.addGameObject(leaf);
             }
