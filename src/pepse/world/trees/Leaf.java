@@ -15,6 +15,7 @@ public class Leaf extends Block {
 
     public static final Color LEAF_COLOR = new Color(50, 200, 30);
     private final Random rand;
+
     private Vector2 topLeftCorner;
     private Transition<Float> horizontalTransition;
     private Transition<Float> angleTransition;
@@ -22,6 +23,7 @@ public class Leaf extends Block {
 
     public Leaf(Vector2 topLeftCorner) {
         super(topLeftCorner, new RectangleRenderable(LEAF_COLOR));
+        physics().setMass(1);
         this.topLeftCorner = topLeftCorner;
         this.rand = new Random();
         // transitions leaf angles
@@ -31,7 +33,7 @@ public class Leaf extends Block {
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeDimensions);
         // drops leaves
-        new ScheduledTask(this, rand.nextFloat(100) + 20, true, this::dropLeaf);
+        new ScheduledTask(this, rand.nextFloat(100) + 20, false, this::dropLeaf);
     }
 
     /**
@@ -73,9 +75,15 @@ public class Leaf extends Block {
 
     private void returnLeaf(){
         setTopLeftCorner(this.topLeftCorner);
-        changeAngle();
-        changeDimensions();
         renderer().setOpaqueness(1);
+        new ScheduledTask(this, rand.nextFloat(2), false,
+                this::changeAngle);
+        // tansitions leaf size
+        new ScheduledTask(this, rand.nextFloat(2), false,
+                this::changeDimensions);
+        // drops leaves
+        new ScheduledTask(this, rand.nextFloat(100) + 20, false, this::dropLeaf);
+
     }
 
     @Override

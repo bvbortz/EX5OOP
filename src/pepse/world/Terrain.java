@@ -1,6 +1,7 @@
 package pepse.world;
 
 import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
@@ -51,7 +52,7 @@ public class Terrain {
             Block groundBlock = new Block(new Vector2(x, y + (i * Block.SIZE)),
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
             groundBlock.setTag("groundBlock");
-            gameObjects.addGameObject(groundBlock, groundLayer);
+            gameObjects.addGameObject(groundBlock, Layer.STATIC_OBJECTS);
         }
     }
 
