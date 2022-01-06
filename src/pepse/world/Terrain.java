@@ -8,12 +8,14 @@ import pepse.util.ColorSupplier;
 import pepse.util.NoiseGenerator;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Terrain {
 
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int TERRAIN_DEPTH = 20;
-
+    private HashMap<Integer, ArrayList<Block>> map;
     private final NoiseGenerator noiseGenerator;
     private float groundHeightAtX0;
     private GameObjectCollection gameObjects;
@@ -51,13 +53,13 @@ public class Terrain {
         for (int i = 0; i < TERRAIN_DEPTH; i++) {
             Block groundBlock = new Block(new Vector2(x, y + (i * Block.SIZE)),
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
-            if(i <= 3){
+            if(i <= 1){
                 groundBlock.setTag("groundBlock");
             }
             else{
                 groundBlock.setTag("groundBlockLow");
             }
-            gameObjects.addGameObject(groundBlock, Layer.STATIC_OBJECTS);
+            gameObjects.addGameObject(groundBlock, groundLayer);
         }
     }
 

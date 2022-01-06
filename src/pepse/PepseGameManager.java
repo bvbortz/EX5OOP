@@ -41,12 +41,13 @@ public class PepseGameManager extends GameManager {
             tree.createInRange((int)avatar.getCenter().x()-windowWidth, (int)avatar.getCenter().x()+windowWidth);
             leftEdge = (int)avatar.getCenter().x()-windowWidth;
             rightEdge = (int)avatar.getCenter().x()+windowWidth;
+            for(var object : gameObjects()){
+                if(object.getCenter().x() < leftEdge || object.getCenter().x() > rightEdge){
+                    gameObjects().removeGameObject(object);
+                }
+            }
         }
-//        for(var object : gameObjects()){
-//            if(object.getCenter().x() < leftEdge || object.getCenter().x() > rightEdge){
-//                gameObjects().removeGameObject(object);
-//            }
-//        }
+
     }
 
     public static void main(String[] args) {
@@ -56,10 +57,9 @@ public class PepseGameManager extends GameManager {
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-        windowController.setTargetFramerate(80);
+        windowController.setTargetFramerate(40);
         this.windowController= windowController;
         windowWidth = (int) windowController.getWindowDimensions().x();
-        System.out.printf("screen: x-%f, y-%f", windowController.getWindowDimensions().x(), windowController.getWindowDimensions().y());
         Sky.create(gameObjects(), windowController.getWindowDimensions(), Layer.BACKGROUND);
         Night.create(gameObjects(), windowController.getWindowDimensions(), 10f, Layer.FOREGROUND);
         sun = Sun.create(windowController.getWindowDimensions(), 20, gameObjects(), Layer.BACKGROUND+1);
