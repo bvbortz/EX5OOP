@@ -51,7 +51,12 @@ public class Terrain {
         for (int i = 0; i < TERRAIN_DEPTH; i++) {
             Block groundBlock = new Block(new Vector2(x, y + (i * Block.SIZE)),
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
-            groundBlock.setTag("groundBlock");
+            if(i <= 3){
+                groundBlock.setTag("groundBlock");
+            }
+            else{
+                groundBlock.setTag("groundBlockLow");
+            }
             gameObjects.addGameObject(groundBlock, Layer.STATIC_OBJECTS);
         }
     }
