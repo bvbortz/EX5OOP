@@ -34,7 +34,6 @@ public class PepseGameManager extends GameManager {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        int delta = (int) Math.abs(lastXPos - avatar.getCenter().x());
         if(avatar.getCenter().x() - leftEdge <= windowWidth / 2f ||
                 rightEdge- avatar.getCenter().x() <= windowWidth / 2f){
             terrain.createInRange((int)avatar.getCenter().x()-windowWidth, (int)avatar.getCenter().x()+windowWidth);
@@ -66,9 +65,9 @@ public class PepseGameManager extends GameManager {
         SunHalo.create(gameObjects(), sun, new Color(255, 255, 0, 20), Layer.BACKGROUND+10);
         terrain = new Terrain(gameObjects(), Layer.STATIC_OBJECTS,
                 windowController.getWindowDimensions(), 60);
-        terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
+        terrain.createInRange(-windowWidth / 2, 3*windowWidth / 2);
         tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
-        tree.createInRange(0, (int)windowController.getWindowDimensions().x());
+        tree.createInRange(-windowWidth / 2, 3*windowWidth / 2);
         Vector2 initialAvatarLocation0 = new Vector2(windowController.getWindowDimensions().x() /2, terrain.groundHeightAt(300)-50);
         avatar = Avatar.create(gameObjects(), Layer.DEFAULT,
                 initialAvatarLocation0, inputListener, imageReader);

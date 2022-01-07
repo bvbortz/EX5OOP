@@ -23,6 +23,7 @@ public class Leaf extends Block {
     private Transition<Float> angleTransition;
     private Transition<Vector2> dimensionsTransition;
     private GameObjectCollection gameObjects;
+    private boolean leavesFalling;
 
     public Leaf(Vector2 topLeftCorner, GameObjectCollection gameObjects) {
         super(topLeftCorner, new RectangleRenderable(LEAF_COLOR));
@@ -30,6 +31,7 @@ public class Leaf extends Block {
         physics().setMass(1);
         this.topLeftCorner = topLeftCorner;
         this.rand = new Random();
+        leavesFalling = false;
         // transitions leaf angles
         new ScheduledTask(this, rand.nextFloat(2), false,
                 this::changeAngle);
@@ -63,6 +65,7 @@ public class Leaf extends Block {
      * makes leaf fall and fade out
      */
     private void dropLeaf(){
+        leavesFalling = true;
         gameObjects.removeGameObject(this, Layer.STATIC_OBJECTS);
         gameObjects.addGameObject(this, Layer.DEFAULT);
         transform().setVelocityY(100);
@@ -82,6 +85,7 @@ public class Leaf extends Block {
     private void returnLeaf(){
 
         stopLeafMovement();
+        leavesFalling = false;
         renderer().setOpaqueness(1);
         setTopLeftCorner(this.topLeftCorner);
         gameObjects.removeGameObject(this, Layer.DEFAULT);
@@ -98,7 +102,7 @@ public class Leaf extends Block {
 
     @Override
     public boolean shouldCollideWith(GameObject other) {
-        if(other.getTag().equals("groundBlock")) {
+        if(other.getTag().equals("groundBlock") && leavesFalling) {
             return super.shouldCollideWith(other);
         }
         return false;

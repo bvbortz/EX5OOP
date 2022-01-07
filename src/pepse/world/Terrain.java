@@ -55,12 +55,11 @@ public class Terrain extends RemovableObjects{
             addToMap(x, groundLayer, groundBlock);
             if(i <= 2){
                 groundBlock.setTag("groundBlock");
-                gameObjects.addGameObject(groundBlock, groundLayer);
             }
             else{
                 groundBlock.setTag("groundBlockLow");
-                gameObjects.addGameObject(groundBlock, groundLayer);
             }
+            gameObjects.addGameObject(groundBlock, groundLayer);
 
         }
     }

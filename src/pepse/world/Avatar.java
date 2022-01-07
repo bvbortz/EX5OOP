@@ -22,7 +22,7 @@ public class Avatar extends GameObject {
      * @param renderable    The renderable representing the object. Can be null, in which case
      */
     private static final int SIZE = 50;
-    private static final float SPEED = 300;
+    private static final float SPEED = 200;
     public static final float TIME_BETWEEN_CLIPS = 1f / 60;
     private UserInputListener inputListener;
     private boolean isRight;
@@ -103,7 +103,7 @@ public class Avatar extends GameObject {
         this.inputListener = inputListener;
         this.imageReader = imageReader;
         transform().setAccelerationY(500);
-        physics().setMass(5);
+        physics().setMass(3);
         transform().setVelocityY(-100);
         energy = 100;
         this.renderable = renderable;
