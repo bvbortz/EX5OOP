@@ -57,7 +57,7 @@ public class PepseGameManager extends GameManager {
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-        windowController.setTargetFramerate(40);
+        windowController.setTargetFramerate(20);
         this.windowController= windowController;
         windowWidth = (int) windowController.getWindowDimensions().x();
         Sky.create(gameObjects(), windowController.getWindowDimensions(), Layer.BACKGROUND);

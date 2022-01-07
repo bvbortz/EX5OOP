@@ -17,4 +17,12 @@ public class Block extends GameObject {
     public static int round(float coordinate){
         return (int)(coordinate/SIZE) * SIZE;
     }
+
+    @Override
+    public boolean shouldCollideWith(GameObject other) {
+        if(this.getTag().equals("groundBlockLow")){
+            return false;
+        }
+        return super.shouldCollideWith(other);
+    }
 }
