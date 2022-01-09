@@ -9,6 +9,7 @@ import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.world.Block;
+import pepse.world.Terrain;
 
 import java.awt.*;
 import java.util.Objects;
@@ -36,13 +37,13 @@ public class Leaf extends Block {
     private Transition<Float> angleTransition;
     private Transition<Vector2> dimensionsTransition;
     private GameObjectCollection gameObjects;
-    private boolean leavesFalling;
+    private boolean leafFalling;
 
     /**
      * A constructor for Leaf class
-     * @param topLeftCorner
-     * @param gameObjects
-     * @param seed
+     * @param topLeftCorner top left coordinates of leaf
+     * @param gameObjects game objects of game
+     * @param seed seed for random
      */
     public Leaf(Vector2 topLeftCorner, GameObjectCollection gameObjects, int seed) {
         super(topLeftCorner, new RectangleRenderable(LEAF_COLOR));
@@ -50,13 +51,12 @@ public class Leaf extends Block {
         physics().setMass(1);
         this.topLeftCorner = topLeftCorner;
         this.rand = new Random(Objects.hash(topLeftCorner.x(), topLeftCorner.y(), seed));
-        leavesFalling = false;
-        // transitions leaf angles
-        scheduelTransitions();
+        leafFalling = false; // if leaf is currently falling
+        scheduleTransitions();
     }
 
     /**
-     * initializes a transformation
+     * initializes a transformation to change the leaf's dimensions
      */
     private void changeDimensions() {
         this.dimensionsTransition = new Transition<>(this,
@@ -66,7 +66,7 @@ public class Leaf extends Block {
     }
 
     /**
-     * initializes a transformation
+     * initializes a transformation to change the leaf's angle
      */
     private void changeAngle() {
         this.angleTransition = new Transition<>(this,
@@ -78,10 +78,11 @@ public class Leaf extends Block {
      * makes leaf fall and fade out
      */
     private void dropLeaf(){
-        leavesFalling = true;
-        gameObjects.removeGameObject(this, Layer.STATIC_OBJECTS);
-        gameObjects.addGameObject(this, Layer.DEFAULT);
+        leafFalling = true;
+        gameObjects.removeGameObject(this, Layer.STATIC_OBJECTS); // falling leaf is no longer static
+        gameObjects.addGameObject(this, Layer.DEFAULT); // adds moving leaf
         transform().setVelocityY(DROP_SPEED);
+        // makes leaf drift horizontally
         this.horizontalTransition = new Transition<>(
                 this, // the game object being changed
                 transform()::setVelocityX, // the method to call
@@ -95,44 +96,65 @@ public class Leaf extends Block {
     }
 
 
+    /**
+     * returns a fallen leaf to its original position and restarts the drop cycle
+     */
     private void returnLeaf(){
-
         stopLeafMovement();
-        leavesFalling = false;
-        renderer().setOpaqueness(1);
+        leafFalling = false;
+        renderer().setOpaqueness(1); // makes leaf visible
         setTopLeftCorner(this.topLeftCorner);
+        // sets leaf as static again
         gameObjects.removeGameObject(this, Layer.DEFAULT);
         gameObjects.addGameObject(this, Layer.STATIC_OBJECTS);
-        scheduelTransitions();
+        scheduleTransitions();  // restarts cycle
 
     }
 
-    private void scheduelTransitions() {
+    /**
+     * sets the various leaf transitions
+     */
+    private void scheduleTransitions() {
+        // transitions leaf angle
         new ScheduledTask(this, rand.nextFloat() * MOVEMENT_CYCLE, false,
                 this::changeAngle);
-        // tansitions leaf size
+        // transitions leaf size
         new ScheduledTask(this, rand.nextFloat() * MOVEMENT_CYCLE, false,
                 this::changeDimensions);
         // drops leaves
         new ScheduledTask(this, rand.nextFloat() * FALLEN_LEAVES_CYCLE, false, this::dropLeaf);
     }
 
+    /**
+     * leaf should collide only with top layers of ground
+     * @param other as in super
+     * @return True if collides with ground block false otherwise
+     */
     @Override
     public boolean shouldCollideWith(GameObject other) {
-        if(other.getTag().equals("groundBlock") && leavesFalling) {
+        if(other.getTag().equals(Terrain.GROUND_BLOCK) && leafFalling) {
             return super.shouldCollideWith(other);
         }
         return false;
     }
 
+    /**
+     * stops all leaf movement on collision with ground
+     * @param other as in super
+     * @param collision as in super
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         stopLeafMovement();
     }
 
+    /**
+     * stops all leave movement
+     */
     private void stopLeafMovement() {
-        this.setVelocity(Vector2.ZERO);
+        this.setVelocity(Vector2.ZERO); // makes velocity zero
+        // removes all transitions
         if(horizontalTransition != null){
             removeComponent(horizontalTransition);
             horizontalTransition = null;
@@ -147,6 +169,10 @@ public class Leaf extends Block {
         }
     }
 
+    /**
+     * ensures leaf remains immobile after hitting ground
+     * @param other as in super
+     */
     @Override
     public void onCollisionExit(GameObject other) {
         super.onCollisionExit(other);
