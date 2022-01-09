@@ -1,1 +1,29 @@
-skdjfhksdjn
+bvbortz
+yoniuni
+
+UML:
+Most differences arose from the need for private functions and variables for the various functionalities
+needed by the game. The biggest difference is the addition of the RemovableObject class to help handle
+the infinite world functionality. We have explained this class in more detail below.
+
+Infinite World:
+We implemented the infinite world by removing objects outside of the avatars view and
+creating new ones based on the avatars movement.
+We created an abstract class RemovableObject to handle objects that get removed and added.
+RemovableObject holds a map manager, and maps the x coordinates to blocks in that coordinate,
+which are than mapped to their layers.
+When the avatar moves from the center of the screen, the createRange method uses the maps of
+RemovableObject to create the relevant new objects and remove the irrelevant out of view objects.
+
+Trees:
+We separated the tree into two classes. The Tree class which creates the trunk of the tree and implements
+the createInRange method, and the Leaf class which handles the functionality of the leaves.
+We did this because the tree trunk has only basic demands and is overall static, whereas the leaves require
+many different functionalities and demands.
+
+Dilemmas:
+The decisions and demands that the infinite world required us to make were not always simple. The need for
+efficiency so as not to slow the game to much required us to think of ways to smoothly remove large parts of
+the game while being able to add them back again, all within the constraints of the existing classes and
+design patterns that we implemented. We decided to create the RemovableObjects class as described above,
+as it allowed for working within those constraints and prevented writing the same code in many places.
