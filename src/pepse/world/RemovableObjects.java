@@ -21,7 +21,6 @@ public abstract class RemovableObjects {
         }
     }
     protected void removeFromMap(int minX, int maxX){
-        System.out.println("size of map " + mapXtoBlocksToLayer.size());
         for(var xToMapEntry : mapXtoBlocksToLayer.entrySet()){
             if(xToMapEntry.getKey() < minX || xToMapEntry.getKey() > maxX){
                 for(var blockToLayerEntry : xToMapEntry.getValue().entrySet()){

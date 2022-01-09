@@ -12,18 +12,27 @@ import java.awt.*;
 public class Night {
     private static final Color NIGHT_COLOR = Color.BLACK;
     private static final Float MIDNIGHT_OPACITY = 0.5f;
+    public static final String NIGHT = "night";
 
+    /**
+     * This function creates a black rectangular game object that covers the entire game window and changes
+     * its opaqueness in a cyclic manner, in order to resemble day-to-night transitions.
+     * @param gameObjects The collection of all participating game objects.
+     * @param windowDimensions The dimensions of the windows.
+     * @param cycleLength The amount of seconds it should take the created game object to complete a full cycle.
+     * @param layer  The number of the layer to which the created game object should be added.
+     * @return A new game object representing day-to-night transitions.
+     */
     public static GameObject create(
-            GameObjectCollection gameObjects,
+            GameObjectCollection gameObjects, int layer,
             Vector2 windowDimensions,
-            float cycleLength,
-            int layer){
+            float cycleLength){
         GameObject night = new GameObject(
                 Vector2.ZERO, windowDimensions,
                 new RectangleRenderable(NIGHT_COLOR));
         night.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         gameObjects.addGameObject(night, layer);
-        night.setTag("night");
+        night.setTag(NIGHT);
         Transition<Float> nightTransition = new Transition<>(
                 night, //the game object being changed
                 night.renderer()::setOpaqueness,  //the method to call

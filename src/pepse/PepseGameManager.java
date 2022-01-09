@@ -21,6 +21,7 @@ import pepse.world.trees.Tree;
 import java.awt.*;
 
 public class PepseGameManager extends GameManager {
+    public static final int seed = 60;
     private int rightEdge;
     private int leftEdge;
     private int lastXPos;
@@ -40,11 +41,6 @@ public class PepseGameManager extends GameManager {
             tree.createInRange((int)avatar.getCenter().x()-windowWidth, (int)avatar.getCenter().x()+windowWidth);
             leftEdge = (int)avatar.getCenter().x()-windowWidth;
             rightEdge = (int)avatar.getCenter().x()+windowWidth;
-            for(var object : gameObjects()){
-                if(object.getCenter().x() < leftEdge || object.getCenter().x() > rightEdge){
-                    gameObjects().removeGameObject(object);
-                }
-            }
         }
 
     }
@@ -60,13 +56,13 @@ public class PepseGameManager extends GameManager {
         this.windowController= windowController;
         windowWidth = (int) windowController.getWindowDimensions().x();
         Sky.create(gameObjects(), windowController.getWindowDimensions(), Layer.BACKGROUND);
-        Night.create(gameObjects(), windowController.getWindowDimensions(), 10f, Layer.FOREGROUND);
-        sun = Sun.create(windowController.getWindowDimensions(), 20, gameObjects(), Layer.BACKGROUND+1);
-        SunHalo.create(gameObjects(), sun, new Color(255, 255, 0, 20), Layer.BACKGROUND+10);
+        Night.create(gameObjects(), Layer.FOREGROUND, windowController.getWindowDimensions(), 10f);
+        sun = Sun.create(gameObjects(),Layer.BACKGROUND+1, windowController.getWindowDimensions(), 20);
+        SunHalo.create(gameObjects(),Layer.BACKGROUND+10, sun, new Color(255, 255, 0, 20));
         terrain = new Terrain(gameObjects(), Layer.STATIC_OBJECTS,
-                windowController.getWindowDimensions(), 60);
+                windowController.getWindowDimensions(), seed);
         terrain.createInRange(-windowWidth / 2, 3*windowWidth / 2);
-        tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS);
+        tree = new Tree(gameObjects(), terrain::groundHeightAt, Layer.STATIC_OBJECTS, seed);
         tree.createInRange(-windowWidth / 2, 3*windowWidth / 2);
         Vector2 initialAvatarLocation0 = new Vector2(windowController.getWindowDimensions().x() /2, terrain.groundHeightAt(300)-50);
         avatar = Avatar.create(gameObjects(), Layer.DEFAULT,

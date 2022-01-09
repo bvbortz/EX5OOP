@@ -1,20 +1,22 @@
 package pepse.world;
 
 import danogl.collisions.GameObjectCollection;
-import danogl.collisions.Layer;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
 import pepse.util.NoiseGenerator;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Terrain extends RemovableObjects{
 
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int TERRAIN_DEPTH = 20;
+    public static final float INITIAL_HEIGHT_RATIO = 3f / 4;
+    public static final int NOISE_AMPLITUDE = 5;
+    public static final String GROUND_BLOCK = "groundBlock";
+    public static final String GROUND_BLOCK_LOW = "groundBlockLow";
+    public static final int TOP_LAYERS = 2;
     private final NoiseGenerator noiseGenerator;
     private float groundHeightAtX0;
     private int groundLayer;
@@ -22,14 +24,14 @@ public class Terrain extends RemovableObjects{
     public Terrain(GameObjectCollection gameObjects, int groundLayer, Vector2 windowDimensions, int seed) {
         this.gameObjects = gameObjects;
         this.groundLayer = groundLayer;
-        this.groundHeightAtX0 = windowDimensions.y() * (3f / 4);
+        this.groundHeightAtX0 = windowDimensions.y() * INITIAL_HEIGHT_RATIO;
         this.noiseGenerator = new NoiseGenerator(seed, (int)groundHeightAtX0);
 
     }
 
     public float groundHeightAt(float x) {
         // multiply to make more noticeable
-        return (float) (groundHeightAtX0 + (5 * Block.SIZE * noiseGenerator.noise(x)));
+        return (float) (groundHeightAtX0 + (NOISE_AMPLITUDE * Block.SIZE * noiseGenerator.noise(x)));
     }
 
     public void createInRange(int minX, int maxX) {
@@ -53,11 +55,11 @@ public class Terrain extends RemovableObjects{
             Block groundBlock = new Block(new Vector2(x, y + (i * Block.SIZE)),
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
             addToMap(x, groundLayer, groundBlock);
-            if(i <= 2){
-                groundBlock.setTag("groundBlock");
+            if(i <= TOP_LAYERS){
+                groundBlock.setTag(GROUND_BLOCK);
             }
             else{
-                groundBlock.setTag("groundBlockLow");
+                groundBlock.setTag(GROUND_BLOCK_LOW);
             }
             gameObjects.addGameObject(groundBlock, groundLayer);
 

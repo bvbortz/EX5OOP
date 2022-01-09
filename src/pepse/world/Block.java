@@ -20,7 +20,7 @@ public class Block extends GameObject {
 
     @Override
     public boolean shouldCollideWith(GameObject other) {
-        if(this.getTag().equals("groundBlockLow")){
+        if(this.getTag().equals(Terrain.GROUND_BLOCK_LOW)){
             return false;
         }
         return super.shouldCollideWith(other);
